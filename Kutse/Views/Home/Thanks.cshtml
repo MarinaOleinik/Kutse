@@ -1,0 +1,58 @@
+﻿@model Kutse.Models.Guests
+
+    @{
+        try
+        {
+            WebMail.SmtpServer = "smtp.gmail.com";
+            WebMail.SmtpPort = 587;
+            WebMail.EnableSsl = true;
+            WebMail.UserName = "kfcapptest@gmail.com";//
+            WebMail.Password = "vytasapptest";//
+            WebMail.From = "marina.oleinik@tthk.ee";
+
+            WebMail.Send("marina.oleinik@tthk.ee",
+                "Vastus kutsele",
+                Model.Name + " vastas " + ((Model.WillAttend ?? false) ? "tuleb peole " : "ei tule peole"));
+
+
+            WebMail.Send(Model.Email,
+                "Meeldetuletus",
+                Model.Name + ", ara unusta. Peo toimub 12.03.20! Sind ootavad väga!",
+                null,
+                "marina.oleinik@tthk.ee",
+                filesToAttach: new String[] { Path.Combine(Server.MapPath("~/Images/"), Path.GetFileName("sendi.jpg"))}
+               );
+
+
+        }
+        catch (Exception)
+        {
+
+            @:<b> Mul on kahju! Ei saa kirja saata!</b>;
+        }
+    }
+
+
+    <div>
+        <p> Tänan sind, @Model.Name </p>
+    </div>
+    <div>
+        @if (Model.WillAttend == true)
+        {
+            @:Ootame sind kallis sõber!
+            <p>
+                <img src="~/Images/sendi.jpg" />
+            </p>
+        }
+        else
+        {
+            @:Väga kurb uudis. Näeme hiljem!
+            <p>
+                <img src="~/Images/sendi.jpg" />
+            </p>
+        }
+
+
+    </div>
+
+
